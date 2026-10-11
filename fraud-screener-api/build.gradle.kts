@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.logback.classic)
 
     testImplementation(libs.kotlin.test)
+    testImplementation(libs.ktor.server.test.host)
 }
 
 tasks.test {

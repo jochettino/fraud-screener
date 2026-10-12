@@ -1,0 +1,87 @@
+openapi: 3.0.3
+info:
+  title: Fraud Screener API
+  version: 1.0.0
+paths:
+  /v1/banktransfer/outbound:
+    post:
+      summary: Screen an outbound bank transfer for fraud
+      description: |
+        Screening and instrument lookup are mocked.
+        Instrument ids starting with `00000000-` are not found.
+        Amount above 10000 is HELD; a reference containing `fraud` (case-insensitive) is REJECTED; otherwise PASSED.
+      operationId: screenOutboundTransfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OutboundTransferRequest'
+      responses:
+        '200':
+          description: Screening was performed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScreeningResponse'
+        '400':
+          description: A field has an unexpected format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: An instrument was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    OutboundTransferRequest:
+      type: object
+      required: [fromInstrumentId, toInstrumentId, money]
+      properties:
+        fromInstrumentId:
+          type: string
+          format: uuid
+        toInstrumentId:
+          type: string
+          format: uuid
+        money:
+          $ref: '#/components/schemas/Money'
+        reference:
+          type: string
+          maxLength: 20
+    Money:
+      type: object
+      required: [currency, amount]
+      properties:
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+          description: ISO 4217 alphabetic code
+          example: EUR
+        amount:
+          type: string
+          pattern: '^\d+(\.\d+)?$'
+          description: Positive number as string (must be > 0)
+          example: '23.5'
+    ScreeningStatus:
+      type: string
+      description: |
+        PASSED: no fraud suspected. REJECTED: suspected fraud, transfer bounced back.
+        HELD: suspected fraud, transfer blocked so an agent can contact the customer.
+      enum: [PASSED, REJECTED, HELD]
+    ScreeningResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          $ref: '#/components/schemas/ScreeningStatus'
+    Error:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string

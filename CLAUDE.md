@@ -16,6 +16,12 @@ Multi-module Gradle (Kotlin DSL) project. Dependencies are managed in `gradle/li
 
 - `fraud-screener-api`: Kotlin + Ktor/Netty, JDK 21 toolchain, base package `com.jochettino.fraudscreener.api`.
 
+## API
+
+- `POST /v1/banktransfer/outbound` (mocked screening/lookup): 200 `{status: PASSED|REJECTED|HELD}`, 404 unknown instrument, 400 bad format. Mock rules: instrument ids starting with `00000000-` not found; amount > 10000 HELD; reference containing `fraud` (case-insensitive) REJECTED; else PASSED.
+- Swagger UI at `GET /swagger` (e.g. http://localhost:8080/swagger).
+- Contract: `fraud-screener-api/src/main/resources/openapi/fraud-screener-api.yaml` is the source of truth. DTOs are generated into `build/generated/openapi` (package `adapter.http.dto`, task `openApiGenerate`, runs before `compileKotlin`); never hand-write them. They stay in the adapter layer; the package omits `in` because the generator does not escape it.
+
 ## Architecture (hexagonal)
 
 Packages: `domain`, `application` (`port/in`, `port/out`, `service`), `adapter` (`in/http`, `out`), `config`.

@@ -23,3 +23,11 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+// Warms the Gradle cache from build scripts alone (used by the Dockerfile dependency layer).
+// shortcut: configurations that cannot resolve standalone are skipped silently, revisit if a library still downloads late.
+tasks.register("resolveDependencies") {
+    doLast {
+        configurations.filter { it.isCanBeResolved }.forEach { runCatching { it.resolve() } }
+    }
+}

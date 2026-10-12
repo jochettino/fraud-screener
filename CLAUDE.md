@@ -9,6 +9,8 @@ Multi-module Gradle (Kotlin DSL) project. Dependencies are managed in `gradle/li
 - Build: `./gradlew build`
 - Test: `./gradlew test`
 - Run API: `./gradlew :fraud-screener-api:run` (port from env `PORT`, default 8080)
+- Docker: `docker build -t fraud-screener-api .` then `docker run -p 8080:8080 fraud-screener-api`; health at `GET /health`
+- CI: `.github/workflows/ci.yml` (jobs `build-and-test`, `docker`), PR-only, no push trigger
 
 ## Modules
 

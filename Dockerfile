@@ -5,7 +5,7 @@ WORKDIR /src
 COPY gradlew settings.gradle.kts build.gradle.kts gradle.properties ./
 COPY gradle ./gradle
 COPY fraud-screener-api/build.gradle.kts ./fraud-screener-api/
-RUN chmod +x gradlew && ./gradlew --no-daemon help
+RUN chmod +x gradlew && ./gradlew --no-daemon :fraud-screener-api:resolveDependencies
 
 COPY fraud-screener-api/src ./fraud-screener-api/src
 RUN ./gradlew :fraud-screener-api:installDist --no-daemon

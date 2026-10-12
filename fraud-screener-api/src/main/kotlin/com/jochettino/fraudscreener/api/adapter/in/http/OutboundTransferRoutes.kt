@@ -27,6 +27,7 @@ class InvalidRequestException(message: String) : RuntimeException(message)
 private const val MAX_REFERENCE = 20
 private val CURRENCY = Regex("^[A-Z]{3}$")
 private val AMOUNT = Regex("^\\d+(\\.\\d+)?$")
+private val UUID_FORMAT = Regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
 fun Application.installErrorHandling() {
     install(StatusPages) {
@@ -61,4 +62,4 @@ private fun OutboundTransferRequest.toDomain(): OutboundTransfer {
 }
 
 private fun uuid(field: String, value: String): UUID =
-    runCatching { UUID.fromString(value) }.getOrNull() ?: throw InvalidRequestException("$field must be a UUID")
+    if (UUID_FORMAT.matches(value)) UUID.fromString(value) else throw InvalidRequestException("$field must be a UUID")

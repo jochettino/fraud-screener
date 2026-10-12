@@ -53,6 +53,11 @@ class OutboundTransferEndpointTest {
 
     @Test fun `invalid uuid is 400`() = post(body(from = "\"nope\""), HttpStatusCode.BadRequest)
 
+    @Test fun `non-canonical uuid is 400 for both ids`() {
+        post(body(from = "\"1-1-1-1-1\""), HttpStatusCode.BadRequest)
+        post(body(to = "\"1-1-1-1-1\""), HttpStatusCode.BadRequest)
+    }
+
     @Test fun `bad currency is 400`() {
         post(body(currency = "\"eur\""), HttpStatusCode.BadRequest)
         post(body(currency = "\"978\""), HttpStatusCode.BadRequest)

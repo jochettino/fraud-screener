@@ -7,10 +7,11 @@ Multi-module Gradle (Kotlin DSL) project. Dependencies are managed in `gradle/li
 ## Commands
 
 - Build: `./gradlew build`
-- Test: `./gradlew test`
+- Test: `./gradlew test` (unit tests only; excludes `integrationTest`)
+- Integration test: `./gradlew integrationTest` (needs Docker; builds the image and checks `/health` and non-root)
 - Run API: `./gradlew :fraud-screener-api:run` (port from env `PORT`, default 8080)
 - Docker: `docker build -t fraud-screener-api .` then `docker run -p 8080:8080 fraud-screener-api`; health at `GET /health`
-- CI: `.github/workflows/ci.yml` (jobs `build-and-test`, `docker`), PR-only, no push trigger
+- CI: `.github/workflows/ci.yml` (single job `build-and-test`), PR-only, no push trigger
 
 ## Modules
 

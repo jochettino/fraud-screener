@@ -49,6 +49,24 @@ tasks.test {
     useJUnitPlatform()
 }
 
+// Docker-based tests (Testcontainers); kept out of `test` so it stays fast, but part of `check`.
+val integrationTest = testing.suites.register<JvmTestSuite>("integrationTest") {
+    dependencies {
+        implementation(libs.kotlin.test)
+        implementation(libs.testcontainers)
+    }
+    targets.all {
+        testTask.configure {
+            useJUnitPlatform()
+            systemProperty("projectRoot", rootDir.path)
+        }
+    }
+}
+
+tasks.check {
+    dependsOn(integrationTest)
+}
+
 // Warms the Gradle cache from build scripts alone (used by the Dockerfile dependency layer).
 // shortcut: other configurations that cannot resolve standalone are logged and skipped, revisit if a library still downloads late.
 tasks.register("resolveDependencies") {

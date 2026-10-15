@@ -3,11 +3,11 @@ package com.jochettino.fraudscreener.api
 import com.jochettino.fraudscreener.api.adapter.out.MockFraudScreening
 import com.jochettino.fraudscreener.api.adapter.out.MockInstrumentLookup
 import com.jochettino.fraudscreener.api.application.port.out.FraudScreeningPort
-import com.jochettino.fraudscreener.api.application.service.ScreenOutboundTransferService
+import com.jochettino.fraudscreener.api.application.service.ScreenOutboundBankTransferService
 import com.jochettino.fraudscreener.api.domain.InstrumentId
 import com.jochettino.fraudscreener.api.domain.InstrumentNotFoundException
 import com.jochettino.fraudscreener.api.domain.Money
-import com.jochettino.fraudscreener.api.domain.OutboundTransfer
+import com.jochettino.fraudscreener.api.domain.OutboundBankTransfer
 import com.jochettino.fraudscreener.api.domain.ScreeningStatus
 import java.math.BigDecimal
 import java.util.UUID
@@ -20,7 +20,7 @@ class ScreeningLogicTest {
     private val missing = InstrumentId(UUID.fromString("00000000-0000-0000-0000-000000000001"))
 
     private fun transfer(amount: String = "1", reference: String? = null, from: InstrumentId = known, to: InstrumentId = known) =
-        OutboundTransfer(from, to, Money("EUR", BigDecimal(amount)), reference)
+        OutboundBankTransfer(from, to, Money("EUR", BigDecimal(amount)), reference)
 
     @Test
     fun `mock screening rules`() {
@@ -34,14 +34,14 @@ class ScreeningLogicTest {
     @Test
     fun `service throws for unknown instrument and skips screening`() {
         val never = FraudScreeningPort { error("must not be called") }
-        val service = ScreenOutboundTransferService(MockInstrumentLookup(), never)
+        val service = ScreenOutboundBankTransferService(MockInstrumentLookup(), never)
         assertFailsWith<InstrumentNotFoundException> { service.screen(transfer(from = missing)) }
         assertFailsWith<InstrumentNotFoundException> { service.screen(transfer(to = missing)) }
     }
 
     @Test
     fun `service delegates to screening for known instruments`() {
-        val service = ScreenOutboundTransferService(MockInstrumentLookup()) { ScreeningStatus.HELD }
+        val service = ScreenOutboundBankTransferService(MockInstrumentLookup()) { ScreeningStatus.HELD }
         assertEquals(ScreeningStatus.HELD, service.screen(transfer()))
     }
 }

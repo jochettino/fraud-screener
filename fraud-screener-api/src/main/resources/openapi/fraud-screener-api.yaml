@@ -10,13 +10,13 @@ paths:
         Screening and instrument lookup are mocked.
         Instrument ids starting with `00000000-` are not found.
         Amount above 10000 is HELD; a reference containing `fraud` (case-insensitive) is REJECTED; otherwise PASSED.
-      operationId: screenOutboundTransfer
+      operationId: screenOutboundBankTransfer
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OutboundTransferRequest'
+              $ref: '#/components/schemas/OutboundBankTransferRequest'
       responses:
         '200':
           description: Screening was performed
@@ -38,7 +38,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    OutboundTransferRequest:
+    OutboundBankTransferRequest:
       type: object
       required: [fromInstrumentId, toInstrumentId, money]
       properties:

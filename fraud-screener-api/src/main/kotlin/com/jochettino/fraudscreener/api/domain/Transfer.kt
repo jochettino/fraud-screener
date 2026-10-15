@@ -12,12 +12,26 @@ data class Money(val currency: String, val amount: BigDecimal) {
     }
 }
 
+sealed interface BankTransfer {
+    val from: InstrumentId
+    val to: InstrumentId
+    val money: Money
+    val reference: String?
+}
+
 data class OutboundBankTransfer(
-    val from: InstrumentId,
-    val to: InstrumentId,
-    val money: Money,
-    val reference: String?,
-)
+    override val from: InstrumentId,
+    override val to: InstrumentId,
+    override val money: Money,
+    override val reference: String?,
+) : BankTransfer
+
+data class InboundBankTransfer(
+    override val from: InstrumentId,
+    override val to: InstrumentId,
+    override val money: Money,
+    override val reference: String?,
+) : BankTransfer
 
 enum class ScreeningStatus { PASSED, REJECTED, HELD }
 

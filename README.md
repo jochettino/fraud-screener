@@ -1,6 +1,6 @@
 # fraud-screener
 
-Fraud screening API for outbound bank transfers (Ktor/Netty). Screening and instrument lookup are currently mocked.
+Fraud screening API for outbound and inbound bank transfers (Ktor/Netty). Screening and instrument lookup are currently mocked.
 
 ## Prerequisites
 
@@ -29,6 +29,7 @@ curl localhost:8080/health   # {"status":"UP"}
 |----------|-------------|-------------------|
 | `GET /health` | Liveness check | 200 `{"status":"UP"}` |
 | `POST /v1/banktransfer/outbound` | Screen an outbound bank transfer (screening/lookup mocked) | 200 `{"status": "PASSED" \| "REJECTED" \| "HELD"}`, 404 unknown instrument, 400 bad format |
+| `POST /v1/banktransfer/inbound` | Screen an inbound bank transfer (screening/lookup mocked) | 200 `{"status": "PASSED" \| "REJECTED" \| "HELD"}`, 404 unknown instrument, 400 bad format |
 | `GET /swagger` | Swagger UI | 200 HTML (e.g. http://localhost:8080/swagger) |
 
 Mock rules:

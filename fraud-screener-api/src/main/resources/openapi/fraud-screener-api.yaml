@@ -36,9 +36,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /v1/banktransfer/inbound:
+    post:
+      summary: Screen an inbound bank transfer for fraud
+      description: |
+        Screening and instrument lookup are mocked.
+        Instrument ids starting with `00000000-` are not found.
+        Amount above 10000 is HELD; a reference containing `fraud` (case-insensitive) is REJECTED; otherwise PASSED.
+      operationId: screenInboundBankTransfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboundBankTransferRequest'
+      responses:
+        '200':
+          description: Screening was performed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScreeningResponse'
+        '400':
+          description: A field has an unexpected format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: An instrument was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     OutboundBankTransferRequest:
+      type: object
+      required: [fromInstrumentId, toInstrumentId, money]
+      properties:
+        fromInstrumentId:
+          type: string
+          format: uuid
+        toInstrumentId:
+          type: string
+          format: uuid
+        money:
+          $ref: '#/components/schemas/Money'
+        reference:
+          type: string
+          maxLength: 20
+    InboundBankTransferRequest:
       type: object
       required: [fromInstrumentId, toInstrumentId, money]
       properties:

@@ -12,7 +12,7 @@ import io.ktor.server.testing.testApplication
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class OutboundTransferEndpointTest {
+class OutboundBankTransferEndpointTest {
     private val ok = "11111111-1111-1111-1111-111111111111"
     private val unknown = "00000000-0000-0000-0000-000000000001"
 

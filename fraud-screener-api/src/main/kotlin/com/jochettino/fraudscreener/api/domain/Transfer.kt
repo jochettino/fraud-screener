@@ -12,7 +12,7 @@ data class Money(val currency: String, val amount: BigDecimal) {
     }
 }
 
-data class OutboundTransfer(
+data class OutboundBankTransfer(
     val from: InstrumentId,
     val to: InstrumentId,
     val money: Money,

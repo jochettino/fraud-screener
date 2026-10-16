@@ -22,6 +22,6 @@ fun Route.outboundBankTransferRoutes(useCase: ScreenOutboundBankTransferUseCase)
 private fun OutboundBankTransferRequest.toDomain() = OutboundBankTransfer(
     InstrumentId(uuid("fromInstrumentId", fromInstrumentId)),
     InstrumentId(uuid("toInstrumentId", toInstrumentId)),
-    validMoney(money.currency, money.amount, reference),
-    reference,
+    validMoney(money.currency, money.amount),
+    validReference(reference),
 )

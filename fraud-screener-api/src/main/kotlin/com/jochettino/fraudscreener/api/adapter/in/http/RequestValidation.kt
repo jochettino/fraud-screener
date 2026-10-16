@@ -30,14 +30,18 @@ fun Application.installErrorHandling() {
     }
 }
 
-/** Validates the fields shared by inbound and outbound requests and builds the domain [Money]. */
-fun validMoney(currency: String, amount: String, reference: String?): Money {
+/** Validates the money fields shared by inbound and outbound requests and builds the domain [Money]. */
+fun validMoney(currency: String, amount: String): Money {
     if (!CURRENCY.matches(currency)) throw InvalidRequestException("money.currency must be a 3-letter code")
     if (!AMOUNT.matches(amount) || BigDecimal(amount).signum() <= 0) {
         throw InvalidRequestException("money.amount must be a positive number")
     }
-    if ((reference?.length ?: 0) > MAX_REFERENCE) throw InvalidRequestException("reference must be at most $MAX_REFERENCE characters")
     return Money(currency, BigDecimal(amount))
+}
+
+fun validReference(reference: String?): String? {
+    if ((reference?.length ?: 0) > MAX_REFERENCE) throw InvalidRequestException("reference must be at most $MAX_REFERENCE characters")
+    return reference
 }
 
 fun uuid(field: String, value: String): UUID =

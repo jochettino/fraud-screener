@@ -4,8 +4,8 @@ import com.jochettino.fraudscreener.api.adapter.http.dto.InboundBankTransferRequ
 import com.jochettino.fraudscreener.api.adapter.http.dto.ScreeningResponse
 import com.jochettino.fraudscreener.api.adapter.http.dto.ScreeningStatus as ScreeningStatusDto
 import com.jochettino.fraudscreener.api.application.port.`in`.ScreenInboundBankTransferUseCase
-import com.jochettino.fraudscreener.api.domain.InstrumentId
 import com.jochettino.fraudscreener.api.domain.InboundBankTransfer
+import com.jochettino.fraudscreener.api.domain.InstrumentId
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route

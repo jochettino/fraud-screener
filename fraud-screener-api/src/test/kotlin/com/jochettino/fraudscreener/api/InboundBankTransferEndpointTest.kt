@@ -41,7 +41,7 @@ class InboundBankTransferEndpointTest {
 
     @Test fun `passed`() = post(body(), HttpStatusCode.OK, """{"status":"PASSED"}""")
 
-    @Test fun `passed without reference or with ok reference`() = post(body(reference = "salary"), HttpStatusCode.OK, """{"status":"PASSED"}""")
+    @Test fun `passed with ok reference`() = post(body(reference = "salary"), HttpStatusCode.OK, """{"status":"PASSED"}""")
 
     @Test fun `held above threshold`() = post(body(amount = "\"10000.01\""), HttpStatusCode.OK, """{"status":"HELD"}""")
 

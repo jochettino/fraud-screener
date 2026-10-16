@@ -2,8 +2,8 @@ package com.jochettino.fraudscreener.api.adapter.out
 
 import com.jochettino.fraudscreener.api.application.port.out.FraudScreeningPort
 import com.jochettino.fraudscreener.api.application.port.out.InstrumentLookupPort
-import com.jochettino.fraudscreener.api.domain.InstrumentId
 import com.jochettino.fraudscreener.api.domain.BankTransfer
+import com.jochettino.fraudscreener.api.domain.InstrumentId
 import com.jochettino.fraudscreener.api.domain.ScreeningStatus
 import java.math.BigDecimal
 

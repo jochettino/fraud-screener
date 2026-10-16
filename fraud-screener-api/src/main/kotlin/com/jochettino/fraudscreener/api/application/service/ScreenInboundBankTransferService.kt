@@ -3,8 +3,8 @@ package com.jochettino.fraudscreener.api.application.service
 import com.jochettino.fraudscreener.api.application.port.`in`.ScreenInboundBankTransferUseCase
 import com.jochettino.fraudscreener.api.application.port.out.FraudScreeningPort
 import com.jochettino.fraudscreener.api.application.port.out.InstrumentLookupPort
-import com.jochettino.fraudscreener.api.domain.InstrumentNotFoundException
 import com.jochettino.fraudscreener.api.domain.InboundBankTransfer
+import com.jochettino.fraudscreener.api.domain.InstrumentNotFoundException
 import com.jochettino.fraudscreener.api.domain.ScreeningStatus
 
 class ScreenInboundBankTransferService(

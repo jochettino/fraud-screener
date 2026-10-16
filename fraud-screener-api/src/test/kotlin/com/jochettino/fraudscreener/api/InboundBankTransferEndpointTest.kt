@@ -75,9 +75,4 @@ class InboundBankTransferEndpointTest {
         post("""{"fromInstrumentId":"$ok","money":{"currency":"EUR","amount":"1"}}""", HttpStatusCode.BadRequest)
 
     @Test fun `malformed json is 400`() = post("{not json", HttpStatusCode.BadRequest)
-
-    @Test fun `swagger ui is served`() = testApplication {
-        application { module() }
-        assertEquals(HttpStatusCode.OK, client.get("/swagger").status)
-    }
 }

@@ -3,7 +3,9 @@ package com.jochettino.fraudscreener.api
 import com.jochettino.fraudscreener.api.adapter.out.MockFraudScreening
 import com.jochettino.fraudscreener.api.adapter.out.MockInstrumentLookup
 import com.jochettino.fraudscreener.api.application.port.out.FraudScreeningPort
+import com.jochettino.fraudscreener.api.application.service.ScreenInboundBankTransferService
 import com.jochettino.fraudscreener.api.application.service.ScreenOutboundBankTransferService
+import com.jochettino.fraudscreener.api.domain.InboundBankTransfer
 import com.jochettino.fraudscreener.api.domain.InstrumentId
 import com.jochettino.fraudscreener.api.domain.InstrumentNotFoundException
 import com.jochettino.fraudscreener.api.domain.Money
@@ -29,6 +31,17 @@ class ScreeningLogicTest {
         assertEquals(ScreeningStatus.HELD, screening.screen(transfer("10000.01")))
         assertEquals(ScreeningStatus.REJECTED, screening.screen(transfer(reference = "my FRAUD ref")))
         assertEquals(ScreeningStatus.HELD, screening.screen(transfer("20000", "fraud")))
+    }
+
+    @Test
+    fun `inbound uses the same screening and lookup rules`() {
+        val inbound = { amount: String, ref: String? -> InboundBankTransfer(known, known, Money("EUR", BigDecimal(amount)), ref) }
+        assertEquals(ScreeningStatus.PASSED, MockFraudScreening().screen(inbound("1", null)))
+        assertEquals(ScreeningStatus.HELD, MockFraudScreening().screen(inbound("10000.01", null)))
+        assertEquals(ScreeningStatus.REJECTED, MockFraudScreening().screen(inbound("1", "Fraud")))
+        val service = ScreenInboundBankTransferService(MockInstrumentLookup()) { ScreeningStatus.PASSED }
+        assertFailsWith<InstrumentNotFoundException> { service.screen(InboundBankTransfer(missing, known, Money("EUR", BigDecimal.ONE), null)) }
+        assertFailsWith<InstrumentNotFoundException> { service.screen(InboundBankTransfer(known, missing, Money("EUR", BigDecimal.ONE), null)) }
     }
 
     @Test

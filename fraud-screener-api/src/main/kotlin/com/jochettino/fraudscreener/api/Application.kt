@@ -2,7 +2,9 @@ package com.jochettino.fraudscreener.api
 
 import com.jochettino.fraudscreener.api.adapter.`in`.http.healthRoutes
 import com.jochettino.fraudscreener.api.adapter.`in`.http.installErrorHandling
-import com.jochettino.fraudscreener.api.adapter.`in`.http.OutboundBankTransferRoutes
+import com.jochettino.fraudscreener.api.adapter.`in`.http.inboundBankTransferRoutes
+import com.jochettino.fraudscreener.api.adapter.`in`.http.outboundBankTransferRoutes
+import com.jochettino.fraudscreener.api.config.screenInboundBankTransferUseCase
 import com.jochettino.fraudscreener.api.config.screenOutboundBankTransferUseCase
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
@@ -26,6 +28,7 @@ fun Application.module() {
     routing {
         healthRoutes()
         swaggerUI(path = "swagger", swaggerFile = "openapi/fraud-screener-api.yaml")
-        OutboundBankTransferRoutes(screenOutboundBankTransferUseCase())
+        outboundBankTransferRoutes(screenOutboundBankTransferUseCase())
+        inboundBankTransferRoutes(screenInboundBankTransferUseCase())
     }
 }
